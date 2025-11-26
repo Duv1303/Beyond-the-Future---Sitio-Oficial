@@ -1,6 +1,9 @@
-// Script para funcionalidades interactivas del sitio
+// Script para funcionalidades interactivas del sitio - CORREGIDO
 
 document.addEventListener('DOMContentLoaded', function() {
+    // PREVENIR PROBLEMAS DE VIEWPORT EN MÓVILES
+    setupViewportFix();
+    
     // Inicializar partículas
     initParticles();
     
@@ -24,18 +27,45 @@ document.addEventListener('DOMContentLoaded', function() {
                     top: offsetTop,
                     behavior: 'smooth'
                 });
+                
+                // Cerrar menú móvil si está abierto
+                if (window.innerWidth <= 768) {
+                    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+                    const mainNav = document.querySelector('.main-nav');
+                    if (mobileMenuBtn && mobileMenuBtn.classList.contains('active')) {
+                        mobileMenuBtn.classList.remove('active');
+                        mainNav.classList.remove('active');
+                    }
+                }
             }
         });
     });
     
-    // Botón de menú móvil
+    // Botón de menú móvil - MEJORADO
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const mainNav = document.querySelector('.main-nav');
     
     if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', function() {
+        mobileMenuBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
             this.classList.toggle('active');
             mainNav.classList.toggle('active');
+            
+            // Prevenir scroll del body cuando el menú está abierto
+            document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
+        });
+        
+        // Cerrar menú al hacer click fuera
+        document.addEventListener('click', function(e) {
+            if (mainNav.classList.contains('active') && 
+                !mainNav.contains(e.target) && 
+                !mobileMenuBtn.contains(e.target)) {
+                mobileMenuBtn.classList.remove('active');
+                mainNav.classList.remove('active');
+                document.body.style.overflow = '';
+            }
         });
     }
     
@@ -51,104 +81,83 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-// Botón de descarga de demo
-const downloadBtn = document.getElementById('download-btn');
-
-if (downloadBtn) {
-    downloadBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        // Crear efecto de descarga
-        const originalText = this.innerHTML;
-        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando descarga...';
-        this.classList.add('downloading');
-        
-        // Crear enlace de descarga directa
-        const fileId = '1fpok1yFQaivqwK7f6BmomKuynz3FMqdt';
-        const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
-        
-        // Crear elemento de descarga invisible
-        const downloadLink = document.createElement('a');
-        downloadLink.href = downloadUrl;
-        downloadLink.download = 'BeyondTheFuture_Demo.zip'; // Nombre del archivo al descargar
-        downloadLink.style.display = 'none';
-        
-        // Agregar al documento y hacer click
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-        
-        // Restaurar botón después de un tiempo
-        setTimeout(() => {
-            this.innerHTML = originalText;
-            this.classList.remove('downloading');
+    // Botón de descarga de demo - OPTIMIZADO
+    const downloadBtn = document.getElementById('download-btn');
+    
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', function(e) {
+            e.preventDefault();
             
-            // Mostrar mensaje de confirmación
-            const downloadMessage = document.createElement('div');
-            downloadMessage.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: var(--electric-blue);
-                color: white;
-                padding: 15px 20px;
-                border-radius: 10px;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-                z-index: 10000;
-                animation: slideIn 0.3s ease;
-            `;
-            downloadMessage.innerHTML = `
-                <i class="fas fa-check-circle"></i>
-                ¡Descarga iniciada! Revisa tu carpeta de descargas.
-            `;
+            // Crear efecto de descarga
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando descarga...';
+            this.classList.add('downloading');
             
-            document.body.appendChild(downloadMessage);
-            
-            // Remover mensaje después de 5 segundos
+            // Usar setTimeout para evitar bloqueo de UI
             setTimeout(() => {
-                downloadMessage.style.animation = 'slideOut 0.3s ease';
+                // Crear enlace de descarga directa
+                const fileId = '1fpok1yFQaivqwK7f6BmomKuynz3FMqdt';
+                const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+                
+                // Método más estable para descargas
+                const downloadLink = document.createElement('a');
+                downloadLink.href = downloadUrl;
+                downloadLink.setAttribute('download', 'BeyondTheFuture_Demo.zip');
+                downloadLink.setAttribute('target', '_blank');
+                downloadLink.style.display = 'none';
+                
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                
+                // Limpiar después de un tiempo
                 setTimeout(() => {
+                    document.body.removeChild(downloadLink);
+                    this.innerHTML = originalText;
+                    this.classList.remove('downloading');
+                    
+                    showDownloadMessage();
+                }, 1000);
+                
+            }, 500);
+        });
+    }
+    
+    // Función para mostrar mensaje de descarga
+    function showDownloadMessage() {
+        const downloadMessage = document.createElement('div');
+        downloadMessage.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--electric-blue);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+            max-width: 300px;
+            word-wrap: break-word;
+        `;
+        downloadMessage.innerHTML = `
+            <i class="fas fa-check-circle"></i>
+            ¡Descarga iniciada! Revisa tu carpeta de descargas.
+        `;
+        
+        document.body.appendChild(downloadMessage);
+        
+        // Remover mensaje después de 5 segundos
+        setTimeout(() => {
+            downloadMessage.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => {
+                if (downloadMessage.parentNode) {
                     document.body.removeChild(downloadMessage);
-                }, 300);
-            }, 5000);
-            
-        }, 2000);
-    });
-}
-
-// Agregar estilos CSS para las animaciones
-const downloadStyles = document.createElement('style');
-downloadStyles.textContent = `
-    @keyframes slideIn {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
+                }
+            }, 300);
+        }, 5000);
     }
     
-    @keyframes slideOut {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-    
-    .downloading {
-        pointer-events: none;
-        opacity: 0.7;
-    }
-`;
-document.head.appendChild(downloadStyles);
-    
-    // Animación de aparición al hacer scroll
+    // Animación de aparición al hacer scroll - OPTIMIZADA
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -158,6 +167,8 @@ document.head.appendChild(downloadStyles);
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('fade-in');
+                // Dejar de observar después de que se anime
+                observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
@@ -186,96 +197,110 @@ document.head.appendChild(downloadStyles);
             }
         };
         
-        setTimeout(typeWriter, 500);
+        // Delay inicial reducido
+        setTimeout(typeWriter, 300);
     }
     
-    // Cambio de header al hacer scroll
+    // Cambio de header al hacer scroll - OPTIMIZADO
     const header = document.querySelector('.main-header');
+    let scrollTimeout;
     
     window.addEventListener('scroll', function() {
-        if (window.scrollY > 100) {
-            header.style.backgroundColor = 'rgba(10, 14, 41, 0.95)';
-            header.style.backdropFilter = 'blur(15px)';
-        } else {
-            header.style.backgroundColor = 'rgba(10, 14, 41, 0.9)';
-            header.style.backdropFilter = 'blur(10px)';
-        }
+        // Debounce para mejorar rendimiento
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            if (window.scrollY > 100) {
+                header.style.backgroundColor = 'rgba(10, 14, 41, 0.98)';
+                header.style.backdropFilter = 'blur(15px)';
+            } else {
+                header.style.backgroundColor = 'rgba(10, 14, 41, 0.95)';
+                header.style.backdropFilter = 'blur(10px)';
+            }
+        }, 10);
     });
     
-    // Sistema de partículas
+    // Sistema de partículas - OPTIMIZADO
     function initParticles() {
         const canvas = document.getElementById('particles-canvas');
-        const ctx = canvas.getContext('2d');
+        if (!canvas) return;
         
-        // Configurar canvas
+        const ctx = canvas.getContext('2d');
+        let animationFrame;
+        
+        // Configurar canvas con debounce
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
         
         resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+        
+        // Debounce para resize
+        let resizeTimeout;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(resizeCanvas, 250);
+        });
         
         // Crear partículas
         const particles = [];
-        const particleCount = 50;
+        const particleCount = window.innerWidth < 768 ? 25 : 50; // Menos partículas en móvil
         
         for (let i = 0; i < particleCount; i++) {
             particles.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
                 size: Math.random() * 2 + 1,
-                speedX: (Math.random() - 0.5) * 0.5,
-                speedY: (Math.random() - 0.5) * 0.5,
-                color: `rgba(${Math.random() * 100 + 155}, ${Math.random() * 100 + 155}, 255, ${Math.random() * 0.5 + 0.2})`
+                speedX: (Math.random() - 0.5) * 0.3, // Más lento en móvil
+                speedY: (Math.random() - 0.5) * 0.3,
+                color: `rgba(${Math.random() * 100 + 155}, ${Math.random() * 100 + 155}, 255, ${Math.random() * 0.3 + 0.2})`
             });
         }
         
-        // Animar partículas
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            particles.forEach(particle => {
-                // Actualizar posición
-                particle.x += particle.speedX;
-                particle.y += particle.speedY;
+        // Animar partículas con control de FPS
+        let lastTime = 0;
+        const fps = 30; // Reducir FPS en móvil
+        const interval = 1000 / fps;
+        
+        function animateParticles(timestamp) {
+            if (timestamp - lastTime > interval) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
-                // Rebotar en los bordes
-                if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
-                if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
-                
-                // Dibujar partícula
-                ctx.beginPath();
-                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-                ctx.fillStyle = particle.color;
-                ctx.fill();
-                
-                // Conectar partículas cercanas
-                particles.forEach(otherParticle => {
-                    const dx = particle.x - otherParticle.x;
-                    const dy = particle.y - otherParticle.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
+                particles.forEach(particle => {
+                    // Actualizar posición
+                    particle.x += particle.speedX;
+                    particle.y += particle.speedY;
                     
-                    if (distance < 100) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(100, 150, 255, ${0.1 * (1 - distance/100)})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(particle.x, particle.y);
-                        ctx.lineTo(otherParticle.x, otherParticle.y);
-                        ctx.stroke();
-                    }
+                    // Rebotar en los bordes
+                    if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
+                    if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
+                    
+                    // Dibujar partícula
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fillStyle = particle.color;
+                    ctx.fill();
                 });
-            });
+                
+                lastTime = timestamp;
+            }
             
-            requestAnimationFrame(animateParticles);
+            animationFrame = requestAnimationFrame(animateParticles);
         }
         
         animateParticles();
+        
+        // Limpiar al salir de la página
+        window.addEventListener('beforeunload', function() {
+            cancelAnimationFrame(animationFrame);
+        });
     }
     
-    // Sistema del carrusel 3D
+    // Sistema del carrusel 3D - OPTIMIZADO
     function initCarousel() {
         const carousel = document.querySelector('.carousel-3d');
+        if (!carousel) return;
+        
         const items = document.querySelectorAll('.carousel-item');
         const prevBtn = document.querySelector('.prev-btn');
         const nextBtn = document.querySelector('.next-btn');
@@ -284,80 +309,97 @@ document.head.appendChild(downloadStyles);
         let currentIndex = 0;
         const totalItems = items.length;
         const angle = 360 / totalItems;
+        let autoPlay;
         
         function updateCarousel() {
-            // Rotar el carrusel
+            // Usar transform3d para mejor rendimiento
             carousel.style.transform = `rotateY(${currentIndex * -angle}deg)`;
             
             // Actualizar clases activas
             items.forEach((item, index) => {
-                item.classList.remove('active');
-                if (index === currentIndex) {
-                    item.classList.add('active');
-                }
+                item.classList.toggle('active', index === currentIndex);
             });
             
             // Actualizar indicadores
             indicators.forEach((indicator, index) => {
-                indicator.classList.remove('active');
-                if (index === currentIndex) {
-                    indicator.classList.add('active');
-                }
+                indicator.classList.toggle('active', index === currentIndex);
             });
         }
         
-        // Navegación automática
-        let autoPlay = setInterval(() => {
-            currentIndex = (currentIndex + 1) % totalItems;
+        // Navegación automática con control
+        function startAutoPlay() {
+            autoPlay = setInterval(() => {
+                currentIndex = (currentIndex + 1) % totalItems;
+                updateCarousel();
+            }, 4000);
+        }
+        
+        function stopAutoPlay() {
+            clearInterval(autoPlay);
+        }
+        
+        function navigate(direction) {
+            stopAutoPlay();
+            currentIndex = (currentIndex + direction + totalItems) % totalItems;
             updateCarousel();
-        }, 4000);
+            startAutoPlay();
+        }
         
         // Botones de navegación
-        prevBtn.addEventListener('click', () => {
-            clearInterval(autoPlay);
-            currentIndex = (currentIndex - 1 + totalItems) % totalItems;
-            updateCarousel();
-            autoPlay = setInterval(() => {
-                currentIndex = (currentIndex + 1) % totalItems;
-                updateCarousel();
-            }, 4000);
-        });
-        
-        nextBtn.addEventListener('click', () => {
-            clearInterval(autoPlay);
-            currentIndex = (currentIndex + 1) % totalItems;
-            updateCarousel();
-            autoPlay = setInterval(() => {
-                currentIndex = (currentIndex + 1) % totalItems;
-                updateCarousel();
-            }, 4000);
-        });
+        if (prevBtn) prevBtn.addEventListener('click', () => navigate(-1));
+        if (nextBtn) nextBtn.addEventListener('click', () => navigate(1));
         
         // Indicadores
         indicators.forEach((indicator, index) => {
             indicator.addEventListener('click', () => {
-                clearInterval(autoPlay);
+                stopAutoPlay();
                 currentIndex = index;
                 updateCarousel();
-                autoPlay = setInterval(() => {
-                    currentIndex = (currentIndex + 1) % totalItems;
-                    updateCarousel();
-                }, 4000);
+                startAutoPlay();
             });
         });
         
-        // Pausar autoplay al hacer hover
-        carousel.addEventListener('mouseenter', () => {
-            clearInterval(autoPlay);
-        });
+        // Control de autoplay
+        carousel.addEventListener('mouseenter', stopAutoPlay);
+        carousel.addEventListener('mouseleave', startAutoPlay);
+        carousel.addEventListener('touchstart', stopAutoPlay);
         
-        carousel.addEventListener('mouseleave', () => {
-            autoPlay = setInterval(() => {
-                currentIndex = (currentIndex + 1) % totalItems;
-                updateCarousel();
-            }, 4000);
+        // Iniciar autoplay
+        startAutoPlay();
+        
+        // Pausar autoplay cuando la página no está visible
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                stopAutoPlay();
+            } else {
+                startAutoPlay();
+            }
         });
     }
+    
+    // Setup para fix de viewport en móviles
+    function setupViewportFix() {
+        // Prevenir zoom en inputs
+        document.addEventListener('touchstart', function(e) {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+                return;
+            }
+        }, { passive: true });
+        
+        // Fix para altura visual en móviles
+        function setVH() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        
+        setVH();
+        window.addEventListener('resize', setVH);
+        window.addEventListener('orientationchange', setVH);
+    }
+    
+    // Inicializar video
+    initVideo();
+    initDesktopRecommendation();
     
     // Contador de visitas
     let visitCount = localStorage.getItem('btfVisitCount') || 0;
@@ -365,104 +407,34 @@ document.head.appendChild(downloadStyles);
     localStorage.setItem('btfVisitCount', visitCount);
     
     console.log(`¡Bienvenido a Beyond the Future! Esta es tu visita número ${visitCount}.`);
-    
-    // Añadir estilos CSS para animaciones
-    const style = document.createElement('style');
-    style.textContent = `
-        .fade-element {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-        
-        .fade-in {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .downloading {
-            pointer-events: none;
-            opacity: 0.7;
-        }
-        
-        @media (max-width: 768px) {
-            .main-nav {
-                display: none;
-            }
-            
-            .main-nav.active {
-                display: block;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: rgba(10, 14, 41, 0.95);
-                backdrop-filter: blur(15px);
-                padding: 20px;
-            }
-            
-            .main-nav.active ul {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .mobile-menu-btn.active span:nth-child(1) {
-                transform: rotate(45deg) translate(5px, 5px);
-            }
-            
-            .mobile-menu-btn.active span:nth-child(2) {
-                opacity: 0;
-            }
-            
-            .mobile-menu-btn.active span:nth-child(3) {
-                transform: rotate(-45deg) translate(7px, -6px);
-            }
-        }
-    `;
-    document.head.appendChild(style);
 });
 
-// Control de video - Agrega esto al DOMContentLoaded
+// Control de video
 function initVideo() {
     const videoWrapper = document.querySelector('.video-wrapper');
     const iframe = videoWrapper?.querySelector('iframe');
     
     if (iframe) {
-        // Mostrar indicador de carga
         iframe.addEventListener('load', function() {
             videoWrapper.classList.remove('loading');
         });
         
-        // Ocultar indicador después de un tiempo (fallback)
+        // Fallback timeout
         setTimeout(() => {
             videoWrapper.classList.remove('loading');
         }, 3000);
         
-        // Agregar clase loading inicial
         videoWrapper.classList.add('loading');
     }
 }
-
-// Llamar la función cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', function() {
-    initVideo();
-    
-    // También agregar el enlace al nav si quieres
-    const nav = document.querySelector('.main-nav ul');
-    if (nav) {
-        const trailerItem = document.createElement('li');
-        trailerItem.innerHTML = '<a href="#trailer" class="nav-link">Tráiler</a>';
-        // Insertar antes de Demo
-        const demoItem = document.querySelector('a[href="#demo"]').parentElement;
-        nav.insertBefore(trailerItem, demoItem);
-    }
-});
 
 // Detección de dispositivo y pantalla de recomendación
 function initDesktopRecommendation() {
     const recommendation = document.getElementById('desktop-recommendation');
     const continueMobileBtn = document.getElementById('continue-mobile');
     const openDesktopBtn = document.getElementById('open-desktop');
+    
+    if (!recommendation) return;
     
     // Verificar si es un dispositivo móvil
     function isMobileDevice() {
@@ -476,32 +448,32 @@ function initDesktopRecommendation() {
     }
     
     // Mostrar recomendación solo en móviles y si no se ha aceptado antes
-    if (isMobileDevice() && !hasAcceptedRecommendation() && recommendation) {
+    if (isMobileDevice() && !hasAcceptedRecommendation()) {
         recommendation.style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // Prevenir scroll
         
         // Continuar en móvil
         continueMobileBtn.addEventListener('click', function() {
             localStorage.setItem('desktopRecommendationAccepted', 'true');
             recommendation.classList.add('hidden');
+            document.body.style.overflow = '';
             setTimeout(() => {
                 recommendation.style.display = 'none';
             }, 500);
         });
         
-        // Abrir en desktop (intentar abrir en nueva ventana/pestaña)
+        // Abrir en desktop
         openDesktopBtn.addEventListener('click', function() {
-            // Intentar abrir la página en una nueva ventana (simulando desktop)
             const newWindow = window.open(window.location.href, '_blank');
             if (newWindow) {
-                // Si se pudo abrir nueva ventana, cerrar esta
                 setTimeout(() => {
                     window.close();
                 }, 1000);
             } else {
-                // Si el navegador bloquea popup, simplemente continuar
                 alert('Por favor, copia la URL y ábrela en tu navegador de escritorio para la mejor experiencia.');
                 localStorage.setItem('desktopRecommendationAccepted', 'true');
                 recommendation.classList.add('hidden');
+                document.body.style.overflow = '';
                 setTimeout(() => {
                     recommendation.style.display = 'none';
                 }, 500);
@@ -513,20 +485,109 @@ function initDesktopRecommendation() {
             if (e.key === 'Escape' && recommendation.style.display === 'flex') {
                 localStorage.setItem('desktopRecommendationAccepted', 'true');
                 recommendation.classList.add('hidden');
+                document.body.style.overflow = '';
                 setTimeout(() => {
                     recommendation.style.display = 'none';
                 }, 500);
             }
         });
     } else {
-        // Ocultar si no es móvil o ya se aceptó
-        if (recommendation) {
-            recommendation.style.display = 'none';
-        }
+        recommendation.style.display = 'none';
     }
 }
 
-// Llamar la función cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', function() {
-    initDesktopRecommendation();
-});
+// Agregar estilos CSS para las animaciones
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+    
+    .downloading {
+        pointer-events: none;
+        opacity: 0.7;
+    }
+    
+    .fade-element {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    
+    .fade-in {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    /* Fix para viewport en móviles */
+    :root {
+        --vh: 1vh;
+    }
+    
+    .hero {
+        height: 100vh;
+        height: calc(var(--vh, 1vh) * 100);
+    }
+    
+    @media (max-width: 768px) {
+        .main-nav {
+            display: none;
+        }
+        
+        .main-nav.active {
+            display: block;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 60px);
+            background: rgba(10, 14, 41, 0.98);
+            backdrop-filter: blur(20px);
+            padding: 30px 20px;
+            z-index: 999;
+            overflow-y: auto;
+        }
+        
+        .main-nav.active ul {
+            flex-direction: column;
+            gap: 20px;
+            text-align: center;
+        }
+        
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+        
+        /* Prevenir zoom en inputs en iOS */
+        input, select, textarea {
+            font-size: 16px !important;
+        }
+    }
+`;
+document.head.appendChild(style);
