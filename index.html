@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beyond the Future - Videojuego Sci-Fi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Fondo de partículas -->
+    <canvas id="particles-canvas"></canvas>
+    
+    <!-- Encabezado con navegación -->
+    <header class="main-header">
+        <div class="container header-container">
+            <div class="logo">
+                <img src="assets/images/logo.png" alt="Beyond the Future" class="logo-image">
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#inicio" class="nav-link">Inicio</a></li>
+                    <li><a href="#gameplay" class="nav-link">Gameplay</a></li>
+                    <li><a href="#personajes" class="nav-link">Personajes</a></li>
+                    <li><a href="#demo" class="nav-link">Demo</a></li>
+                    <li><a href="#creditos" class="nav-link">Créditos</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-btn" aria-label="Menú móvil">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Sección Hero / Inicio -->
+        <section id="inicio" class="hero">
+            <div class="hero-background">
+                <img src="assets/images/hero.png" alt="Beyond the Future - Mundo Futurista" class="hero-image">
+                <div class="hero-overlay"></div>
+            </div>
+            <div class="container hero-container">
+                <article class="hero-content">
+                    <img class="hero-title" src="assets/images/Logo.png" alt="Beyond the Future"></img>
+                    <p class="hero-subtitle">¿Puede una maquina anhelar la libertad? <br>Busca la respuesta en las sombras de esta prisión mecánica.</p>
+                    <div class="hero-buttons">
+                        <a href="#demo" class="btn btn-primary">
+                            <i class="fas fa-play" aria-hidden="true"></i>
+                            Jugar Demo
+                        </a>
+                        <a href="#gameplay" class="btn btn-secondary">
+                            <i class="fas fa-info-circle" aria-hidden="true"></i>
+                            Más Información
+                        </a>
+                    </div>
+                </article>
+            </div>
+            <button class="scroll-indicator" aria-label="Desplazarse hacia abajo">
+                <i class="fas fa-chevron-down"></i>
+            </button>
+        </section>
+
+        <!-- Carrusel 3D Full Width -->
+        <section class="carousel-section">
+            <div class="carousel-3d-container">
+                <div class="carousel-3d">
+                    <div class="carousel-item active" data-index="0">
+                        <img src="assets/images/Perspectivacenital.webp" alt="Perspectiva Cenital - Vista estratégica" class="carousel-image">
+                        <div class="carousel-caption">
+                            <h3>Perspectiva Cenital</h3>
+                            <p>Controla al robot con vista superior para planificar movimientos estratégicos</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" data-index="1">
+                        <img src="assets/images/Evasiondeseguridad.webp" alt="Sistemas de Seguridad - Evasión de drones" class="carousel-image">
+                        <div class="carousel-caption">
+                            <h3>Evasión de Seguridad</h3>
+                            <p>Observa patrones y evade Z-Drones y Z-Horses con movimientos precisos</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" data-index="2">
+                        <img src="assets/images/Recolectalumis.webp" alt="Recolección de Lumis - Criaturas luminosas" class="carousel-image">
+                        <div class="carousel-caption">
+                            <h3>Recolecta Lumis</h3>
+                            <p>Encuentra criaturas luminosas para canjear mejoras en la Tienda de Aceite</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" data-index="3">
+                        <img src="assets/images/Distraccionesestrategicas.webp" alt="Distracciones Inteligentes - Uso de objetos" class="carousel-image">
+                        <div class="carousel-caption">
+                            <h3>Distracciones Estratégicas</h3>
+                            <p>Utiliza objetos del entorno para crear distracciones y desviar la atención</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" data-index="4">
+                        <img src="assets/images/Estacionestecnologicas.webp" alt="Estaciones Tecnológicas - Progresión" class="carousel-image">
+                        <div class="carousel-caption">
+                            <h3>Estaciones Tecnológicas</h3>
+                            <p>Supera diferentes módulos y avanza a través de instalaciones futuristas</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-controls">
+                    <button class="carousel-btn prev-btn" aria-label="Imagen anterior">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-btn next-btn" aria-label="Siguiente imagen">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="carousel-indicators">
+                    <button class="indicator active" data-index="0" aria-label="Mostrar imagen 1"></button>
+                    <button class="indicator" data-index="1" aria-label="Mostrar imagen 2"></button>
+                    <button class="indicator" data-index="2" aria-label="Mostrar imagen 3"></button>
+                    <button class="indicator" data-index="3" aria-label="Mostrar imagen 4"></button>
+                    <button class="indicator" data-index="4" aria-label="Mostrar imagen 5"></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Gameplay -->
+        <section id="gameplay" class="gameplay">
+            <div class="container">
+                <h2 class="section-title">Gameplay y Mecánicas</h2>
+                <div class="gameplay-content">
+                    <article class="gameplay-features">
+                        <section class="feature-card">
+                            <h3>Perspectiva Cenital</h3>
+                            <p>Controla al robot desde una vista superior que te permite planificar movimientos estratégicos y observar patrones de los sistemas de seguridad.</p>
+                        </section>
+                        <section class="feature-card">                            
+                            <h3>Sigilo y Evasión</h3>
+                            <p>Utiliza el sigilo para evadir Z-Drones móviles y Z-Horses estáticos. Observa sus patrones y movimientos para encontrar oportunidades de escape.</p>
+                        </section>
+                        <section class="feature-card">                            
+                            <h3>Recolección de Lumis</h3>
+                            <p>Encuentra y recolecta criaturas luminosas (Lumis) esparcidas por las instalaciones para canjear mejoras temporales en la Tienda de Aceite.</p>
+                        </section>
+                    </article>
+                    <aside class="gameplay-info">
+                        <div class="info-card">
+                            <h3>Características Principales</h3>
+                            <ul>
+                                <li>Perspectiva cenital estratégica</li>
+                                <li>Sistema de sigilo y evasión</li>
+                                <li>Recolección de Lumis</li>
+                                <li>Distracciones inteligentes</li>
+                                <li>Progresión por estaciones tecnológicas</li>
+                            </ul>
+                            <img src="assets/images/zdron.png" alt="Z-Drone irritado" class="info-img"></img>
+                        </div>                        
+                    </aside>
+                    
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Video -->
+        <section id="trailer" class="trailer-section">
+            <div class="container">
+                <h2 class="section-title">Tráiler Oficial</h2>
+                <div class="video-container">
+                    <div class="video-wrapper">
+                        <iframe 
+                            src="https://www.youtube.com/embed/svHzoHy3txE" 
+                            title="Beyond the Future - Video de Presentación"
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="video-info">
+                        <img src="assets/images/Robottrailer.png" alt="Robot cargando Lumis" class="trailer-img"></img>
+                    </div>    
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Personajes -->
+        <section id="personajes" class="characters-section">
+            <div class="container">
+                <h2 class="section-title">Personajes</h2>
+                <div class="characters-grid">
+                    <article class="character-card">
+                        <figure class="character-image">
+                            <img src="assets/images/Robot.png" alt="Robot - Protagonista sin memoria" class="character-img">
+                            <div class="character-overlay"></div>
+                        </figure>
+                        <section class="character-info">
+                            <header>
+                                <h3>Robot</h3>
+                                <p class="character-role">Protagonista Amnésico</p>
+                            </header>
+                            <p>Un robot sin memoria que despierta atrapado en unas instalaciones desconocidas. Debe explorar el entorno mientras intenta recuperar sus recuerdos y descubrir la verdad detrás de su existencia.</p>
+                            <dl class="character-stats">
+                                <div class="stat">
+                                    <dt>Estado</dt>
+                                    <dd>Amnesia Total</dd>
+                                </div>
+                                <div class="stat">
+                                    <dt>Habilidad</dt>
+                                    <dd>Aceite Lumi</dd>
+                                </div>
+                            </dl>
+                        </section>
+                    </article>
+
+                    <article class="character-card">
+                        <figure class="character-image">
+                            <img src="assets/images/Serdesconocido.png" alt="Ser Desconocido - Guía Misteriosa" class="character-img">
+                            <div class="character-overlay"></div>
+                        </figure>
+                        <section class="character-info">
+                            <header>
+                                <h3>Ser Desconocido</h3>
+                                <p class="character-role">Guía Misterioso</p>
+                            </header>
+                            <p>Una voz etérea que se comunica con el Robot a través de sistemas de audio. Sus intenciones son desconocidas, pero proporciona pistas cruciales para navegar las instalaciones y evitar peligros.</p>
+                            <dl class="character-stats">
+                                <div class="stat">
+                                    <dt>Origen</dt>
+                                    <dd>Desconocido</dd>
+                                </div>
+                                <div class="stat">
+                                    <dt>Función</dt>
+                                    <dd>Asistencia Remota</dd>
+                                </div>
+                            </dl>
+                        </section>
+                    </article>
+
+                    <article class="character-card">
+                        <figure class="character-image">
+                            <img src="assets/images/Zhorses.png" alt="Z-Horses - Centinelas Mecánicos" class="character-img">
+                            <div class="character-overlay"></div>
+                        </figure>
+                        <section class="character-info">
+                            <header>
+                                <h3>Z-Horses</h3>
+                                <p class="character-role">Centinelas Estáticos</p>
+                            </header>
+                            <p>Caballos de mar mecánicos con capacidades de visión de largo alcance. Aunque carecen de movilidad, su campo de visión es extenso y capturan instantáneamente al Robot si lo detectan.</p>
+                            <dl class="character-stats">
+                                <div class="stat">
+                                    <dt>Debilidad</dt>
+                                    <dd>Sensibilidad al Ruido</dd>
+                                </div>
+                                <div class="stat">
+                                    <dt>Alcance</dt>
+                                    <dd>Largo</dd>
+                                </div>
+                            </dl>
+                        </section>
+                    </article>
+
+                    <article class="character-card">
+                        <figure class="character-image">
+                            <img src="assets/images/Zdrones.png" alt="Z-Drones - Vigilantes Móviles" class="character-img">
+                            <div class="character-overlay"></div>
+                        </figure>
+                        <section class="character-info">
+                            <header>
+                                <h3>Z-Drones</h3>
+                                <p class="character-role">Patrulleros Móviles</p>
+                            </header>
+                            <p>Drones de vigilancia que siguen rutas predeterminadas por las instalaciones. Su movimiento constante los hace impredecibles, y cualquier contacto visual resulta en captura inmediata.</p>
+                            <dl class="character-stats">
+                                <div class="stat">
+                                    <dt>Debilidad</dt>
+                                    <dd>Movimiento por ruta</dd>
+                                </div>
+                                <div class="stat">
+                                    <dt>Alcance</dt>
+                                    <dd>Medio</dd>
+                                </div>
+                            </dl>
+                        </section>
+                    </article>
+                </div>
+
+                <article class="lore-section">
+                    <h3>Pensamientos</h3>
+                    <p><strong>Unidad de Procesamiento Principal activada</strong></p> 
+                    <p>"Mis sensores registran un entorno de contradicciones. Me encuentran en 
+                        instalaciones que respiran tecnología pero carecen de vida orgánica. Los 
+                        corredores se extienden en ángulos perfectos de 90 grados, iluminados por 
+                        luces azules que parpadean en secuencias que aún no comprendo.</p>
+                    <p>Me he cruzado con criaturas luminosas que flotan en espacios abandonados. Mi base de 
+                        datos no contiene información sobre su origen, pero detecto que emiten 
+                        frecuencias que calman mis circuitos. Recolectarlos parece... importante. No 
+                        sé por qué.</p>
+                    <p>Hay una voz que me habla, no se si a través de los altavoces del complejo o si 
+                        se ha conectado a mi circuito interno. 
+                        Sus mensajes carecen de datos de origen, pero sus instrucciones han demostrado 
+                        ser efectivas. ¿Es mi creador? ¿Mi carcelero? ¿O simplemente otro 
+                        prisionero en esta jaula tecnológica?</p>
+                    <p>Se que este no es mi lugar de origen. Cada circuito, cada sensor, cada línea 
+                        de código grita que pertenezco a otro lugar. Mi objetivo primario está claro: 
+                        ESCAPAR. Pero hay un objetivo secundario que emerge de mis cálculos: COMPRENDER."</p>
+                    <p><strong>-- Unidad Autónoma BTF-ΓΔΘ, Buscando Respuestas --</strong></p> 
+                    <img src="assets/images/Robotdormido.png" alt="Robot dormido" class="lore-img"></img>
+                </article>
+            </div>
+        </section>
+
+        <!-- Sección Demo -->
+        <section id="demo" class="demo">
+            <div class="container">
+                <h2 class="section-title">Demo Jugable</h2>
+                <article class="demo-content">
+                    <section class="demo-card">
+                        <header class="demo-header">
+                            <h3>Beyond the Future - Demo v0.1</h3>
+                            <mark class="demo-badge">NUEVO</mark>
+                        </header>
+                        <ul class="demo-features" role="list">
+                            <li class="demo-feature">
+                                <i class="fas fa-check" aria-hidden="true"></i>
+                                <span>2 niveles explorables</span>
+                            </li>
+                            <li class="demo-feature">
+                                <i class="fas fa-check" aria-hidden="true"></i>
+                                <span>Desbloqueo de Escudo de Cortocircuito</span>
+                            </li>
+                            <li class="demo-feature">
+                                <i class="fas fa-check" aria-hidden="true"></i>
+                                <span>Sistema de Tienda de Aceite Lumi</span>
+                            </li>
+                            <li class="demo-feature">
+                                <i class="fas fa-check" aria-hidden="true"></i>
+                                <span>Sigilo básico implementado</span>
+                            </li>
+                        </ul>
+                        <footer class="demo-download">
+                            <a href="https://drive.google.com/file/d/1fpok1yFQaivqwK7f6BmomKuynz3FMqdt/view?usp=sharing" class="btn btn-download" id="download-btn">
+                                <i class="fas fa-download" aria-hidden="true"></i>
+                                Descargar Demo (320.3MB)
+                            </a>
+                            <p class="platforms">
+                                <span class="platform-tag">Windows</span>
+                            </p>
+                        </footer>
+                    </section>
+                </article>
+            </div>
+        </section>
+
+        <!-- Sección Créditos -->
+        <section id="creditos" class="credits">
+            <div class="container">
+                <h2 class="section-title">Equipo de Desarrollo</h2>
+                <div class="team-grid">
+                    <article class="team-member">
+                        <figure class="member-photo">
+                            <span class="member-orb"></span>
+                        </figure>
+                        <section class="member-info">
+                            <h3>Duvay Padilla</h3>
+                            <p class="member-role">Programador y Director</p>
+                            <p>Responsable de la visión general del juego y coordinación del equipo.</p>
+                        </section>
+                    </article>
+                    <article class="team-member">
+                        <figure class="member-photo">
+                            <span class="member-orb"></span>
+                        </figure>
+                        <section class="member-info">
+                            <h3>Diego Valencia</h3>
+                            <p class="member-role">Diseñador Narrativo</p>
+                            <p>Desarrollo de la historia, personajes y diálogos del juego.</p>
+                        </section>
+                    </article>
+                    <article class="team-member">
+                        <figure class="member-photo">
+                            <span class="member-orb"></span>
+                        </figure>
+                        <section class="member-info">
+                            <h3>Ingrids Ladino</h3>
+                            <p class="member-role">UI Designer</p>
+                            <p>Diseño de interfaz y elementos interactivos del juego.</p>
+                        </section>
+                    </article>
+                    <article class="team-member">
+                        <figure class="member-photo">
+                            <span class="member-orb"></span>
+                        </figure>
+                        <section class="member-info">
+                            <h3>Maged Contreras</h3>
+                            <p class="member-role">Artista Conceptual</p>
+                            <p>Diseño de personajes y elementos visuales del juego.</p>
+                        </section>
+                    </article>
+                </div>
+                <article class="dev-process">
+                    <h3>Proceso de Desarrollo</h3>
+                    <p>El desarrollo de Beyond the Future inició como proyecto del curso de Diseño
+                        Interactivo en la UNAD, estableciendo como objetivo principal crear un 
+                        prototipo funcional de juego de sigilo con perspectiva cenital dentro del 
+                        plazo de un semestre académico. Seleccionamos Unity como motor de desarrollo 
+                        por la experiencia previa del equipo en esta plataforma, lo que nos permitió 
+                        enfocar recursos en el diseño de mecánicas centrales. La arquitectura inicial 
+                        implementó un sistema de vigilancia modular 
+                        con entidades de comportamiento predecible: Z-Drones con pathfinding basado 
+                        en waypoints fijos y Z-Horses con detección por cono de visión estático.
+                    <p>Durante la fase alpha, el prototipo inicial incluía el Nivel 
+                        1 con mecánicas básicas de sigilo y un sistema de recolección de Lumis sin 
+                        restricciones. Las sesiones de testing revelaron serios problemas: escasa 
+                        diversidad en desafíos, ausencia de planificación a largo plazo, economía 
+                        desbalanceada por acumulación infinita de power-ups y falta de sistema de 
+                        guardado. Estas observaciones guiaron la fase beta donde 
+                        implementamos mejoras sustanciales como el desarrollo del Nivel 2 con estructuras 
+                        más elaboradas que exigían rutas precisas para alcanzar Lumis en ubicaciones 
+                        estratégicas.</p> 
+                    <p>Introdujimos enemigos estacionarios que custodian recursos 
+                        específicos, forzando a los jugadores a desarrollar tácticas especializadas, mientras que 
+                        el sistema económico se reequilibró mediante la tienda de Aceite Lumi con 
+                        límite de tres unidades por tipo de power-up y la introducción del "Escudo de 
+                        Cortocircuito" con duración limitada de 4 segundos. Ademas, se realizó la integración de 
+                        PlayerPrefs, lo cual resolvió la persistencia de datos, almacenando estados de nivel, 
+                        puntuaciones y progreso general entre sesiones.
+                    <p>Con todo esto, pasamos a la fase de prueba, donde el feedback obtenido 
+                        validó que la perspectiva cenital facilitaba la planificación estratégica 
+                        que buscábamos, mientras que el sistema de vigilancia modular permitió 
+                        ajustar la dificultad de forma granular. Los testers reportaron una curva 
+                        de aprendizaje satisfactoria, destacando cómo los enemigos estacionarios 
+                        en el Nivel 2 daban lugar al uso de las mecánicas recientemente aprendidas. 
+                        La implementación de PlayerPrefs resolvió exitosamente el problema de 
+                        continuidad entre sesiones, y el límite de tres power-ups por tipo logró 
+                        equilibrar la economía sin restringir opciones estratégicas. El proyecto 
+                        cumplió con lo planteado y generó una base sólida para 
+                        continuar a futuro, validando nuestra aproximación metodológica de 
+                        desarrollo iterativo centrado en el usuario.</p>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container footer-container">
+            <section class="footer-content">
+                <div class="footer-logo">
+                    <img src="assets/images/logo.png" alt="Beyond the Future" class="logo-image">
+                    <nav class="footer-nav">
+                        <ul>
+                            <li><a href="#inicio">Inicio</a></li>
+                            <li><a href="#gameplay">Gameplay</a></li>
+                            <li><a href="#personajes">Personajes</a></li>
+                            <li><a href="#demo">Demo</a></li>
+                            <li><a href="#creditos">Créditos</a></li>
+                        </ul>
+                    </nav>
+                </div>
+
+            </section>
+            <p class="copyright">&copy; 2025 Beyond the Future. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+<!-- Pantalla de recomendación para desktop -->
+<div id="desktop-recommendation" class="desktop-recommendation">
+    <div class="recommendation-container">
+        <div class="recommendation-content">
+            <div class="recommendation-icon">
+                <i class="fas fa-desktop"></i>
+            </div>
+            <h2>Mejor Experiencia en Desktop</h2>
+            <p>Para disfrutar de la mejor experiencia visual y todas las funcionalidades interactivas, te recomendamos abrir esta página en un navegador de escritorio.</p>
+            <div class="recommendation-buttons">
+                <button id="continue-mobile" class="btn btn-secondary">
+                    <i class="fas fa-mobile-alt"></i>
+                    Continuar en Móvil
+                </button>
+                <button id="open-desktop" class="btn btn-primary">
+                    <i class="fas fa-external-link-alt"></i>
+                    Abrir en Desktop
+                </button>
+            </div>
+            <p class="recommendation-note">
+                <small>La página funcionará en móvil, pero algunas características pueden verse limitadas</small>
+            </p>
+        </div>
+    </div>
+</div>
+</html>
