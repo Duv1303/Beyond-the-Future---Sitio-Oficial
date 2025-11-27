@@ -1,9 +1,6 @@
-// Script para funcionalidades interactivas del sitio - CORREGIDO
+// Script para funcionalidades interactivas del sitio
 
 document.addEventListener('DOMContentLoaded', function() {
-    // PREVENIR PROBLEMAS DE VIEWPORT EN MÓVILES
-    setupViewportFix();
-    
     // Inicializar partículas
     initParticles();
     
@@ -27,45 +24,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     top: offsetTop,
                     behavior: 'smooth'
                 });
-                
-                // Cerrar menú móvil si está abierto
-                if (window.innerWidth <= 768) {
-                    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-                    const mainNav = document.querySelector('.main-nav');
-                    if (mobileMenuBtn && mobileMenuBtn.classList.contains('active')) {
-                        mobileMenuBtn.classList.remove('active');
-                        mainNav.classList.remove('active');
-                    }
-                }
             }
         });
     });
     
-    // Botón de menú móvil - MEJORADO
+    // Botón de menú móvil
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const mainNav = document.querySelector('.main-nav');
     
     if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
+        mobileMenuBtn.addEventListener('click', function() {
             this.classList.toggle('active');
             mainNav.classList.toggle('active');
-            
-            // Prevenir scroll del body cuando el menú está abierto
-            document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
-        });
-        
-        // Cerrar menú al hacer click fuera
-        document.addEventListener('click', function(e) {
-            if (mainNav.classList.contains('active') && 
-                !mainNav.contains(e.target) && 
-                !mobileMenuBtn.contains(e.target)) {
-                mobileMenuBtn.classList.remove('active');
-                mainNav.classList.remove('active');
-                document.body.style.overflow = '';
-            }
         });
     }
     
@@ -81,83 +51,104 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Botón de descarga de demo - OPTIMIZADO
-    const downloadBtn = document.getElementById('download-btn');
-    
-    if (downloadBtn) {
-        downloadBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Crear efecto de descarga
-            const originalText = this.innerHTML;
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando descarga...';
-            this.classList.add('downloading');
-            
-            // Usar setTimeout para evitar bloqueo de UI
-            setTimeout(() => {
-                // Crear enlace de descarga directa
-                const fileId = '1fpok1yFQaivqwK7f6BmomKuynz3FMqdt';
-                const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
-                
-                // Método más estable para descargas
-                const downloadLink = document.createElement('a');
-                downloadLink.href = downloadUrl;
-                downloadLink.setAttribute('download', 'BeyondTheFuture_Demo.zip');
-                downloadLink.setAttribute('target', '_blank');
-                downloadLink.style.display = 'none';
-                
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                
-                // Limpiar después de un tiempo
-                setTimeout(() => {
-                    document.body.removeChild(downloadLink);
-                    this.innerHTML = originalText;
-                    this.classList.remove('downloading');
-                    
-                    showDownloadMessage();
-                }, 1000);
-                
-            }, 500);
-        });
-    }
-    
-    // Función para mostrar mensaje de descarga
-    function showDownloadMessage() {
-        const downloadMessage = document.createElement('div');
-        downloadMessage.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--electric-blue);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            z-index: 10000;
-            animation: slideIn 0.3s ease;
-            max-width: 300px;
-            word-wrap: break-word;
-        `;
-        downloadMessage.innerHTML = `
-            <i class="fas fa-check-circle"></i>
-            ¡Descarga iniciada! Revisa tu carpeta de descargas.
-        `;
+// Botón de descarga de demo
+const downloadBtn = document.getElementById('download-btn');
+
+if (downloadBtn) {
+    downloadBtn.addEventListener('click', function(e) {
+        e.preventDefault();
         
-        document.body.appendChild(downloadMessage);
+        // Crear efecto de descarga
+        const originalText = this.innerHTML;
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando descarga...';
+        this.classList.add('downloading');
         
-        // Remover mensaje después de 5 segundos
+        // Crear enlace de descarga directa
+        const fileId = '1fpok1yFQaivqwK7f6BmomKuynz3FMqdt';
+        const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+        
+        // Crear elemento de descarga invisible
+        const downloadLink = document.createElement('a');
+        downloadLink.href = downloadUrl;
+        downloadLink.download = 'BeyondTheFuture_Demo.zip'; // Nombre del archivo al descargar
+        downloadLink.style.display = 'none';
+        
+        // Agregar al documento y hacer click
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        
+        // Restaurar botón después de un tiempo
         setTimeout(() => {
-            downloadMessage.style.animation = 'slideOut 0.3s ease';
+            this.innerHTML = originalText;
+            this.classList.remove('downloading');
+            
+            // Mostrar mensaje de confirmación
+            const downloadMessage = document.createElement('div');
+            downloadMessage.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--electric-blue);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            downloadMessage.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                ¡Descarga iniciada! Revisa tu carpeta de descargas.
+            `;
+            
+            document.body.appendChild(downloadMessage);
+            
+            // Remover mensaje después de 5 segundos
             setTimeout(() => {
-                if (downloadMessage.parentNode) {
+                downloadMessage.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
                     document.body.removeChild(downloadMessage);
-                }
-            }, 300);
-        }, 5000);
+                }, 300);
+            }, 5000);
+            
+        }, 2000);
+    });
+}
+
+// Agregar estilos CSS para las animaciones
+const downloadStyles = document.createElement('style');
+downloadStyles.textContent = `
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
     }
     
-    // Animación de aparición al hacer scroll - OPTIMIZADA
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+    
+    .downloading {
+        pointer-events: none;
+        opacity: 0.7;
+    }
+`;
+document.head.appendChild(downloadStyles);
+    
+    // Animación de aparición al hacer scroll
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -167,8 +158,6 @@ document.addEventListener('DOMContentLoaded', function() {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('fade-in');
-                // Dejar de observar después de que se anime
-                observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
@@ -197,110 +186,96 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         };
         
-        // Delay inicial reducido
-        setTimeout(typeWriter, 300);
+        setTimeout(typeWriter, 500);
     }
     
-    // Cambio de header al hacer scroll - OPTIMIZADO
+    // Cambio de header al hacer scroll
     const header = document.querySelector('.main-header');
-    let scrollTimeout;
     
     window.addEventListener('scroll', function() {
-        // Debounce para mejorar rendimiento
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
-            if (window.scrollY > 100) {
-                header.style.backgroundColor = 'rgba(10, 14, 41, 0.98)';
-                header.style.backdropFilter = 'blur(15px)';
-            } else {
-                header.style.backgroundColor = 'rgba(10, 14, 41, 0.95)';
-                header.style.backdropFilter = 'blur(10px)';
-            }
-        }, 10);
+        if (window.scrollY > 100) {
+            header.style.backgroundColor = 'rgba(10, 14, 41, 0.95)';
+            header.style.backdropFilter = 'blur(15px)';
+        } else {
+            header.style.backgroundColor = 'rgba(10, 14, 41, 0.9)';
+            header.style.backdropFilter = 'blur(10px)';
+        }
     });
     
-    // Sistema de partículas - OPTIMIZADO
+    // Sistema de partículas
     function initParticles() {
         const canvas = document.getElementById('particles-canvas');
-        if (!canvas) return;
-        
         const ctx = canvas.getContext('2d');
-        let animationFrame;
         
-        // Configurar canvas con debounce
+        // Configurar canvas
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
         
         resizeCanvas();
-        
-        // Debounce para resize
-        let resizeTimeout;
-        window.addEventListener('resize', function() {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(resizeCanvas, 250);
-        });
+        window.addEventListener('resize', resizeCanvas);
         
         // Crear partículas
         const particles = [];
-        const particleCount = window.innerWidth < 768 ? 25 : 50; // Menos partículas en móvil
+        const particleCount = 50;
         
         for (let i = 0; i < particleCount; i++) {
             particles.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
                 size: Math.random() * 2 + 1,
-                speedX: (Math.random() - 0.5) * 0.3, // Más lento en móvil
-                speedY: (Math.random() - 0.5) * 0.3,
-                color: `rgba(${Math.random() * 100 + 155}, ${Math.random() * 100 + 155}, 255, ${Math.random() * 0.3 + 0.2})`
+                speedX: (Math.random() - 0.5) * 0.5,
+                speedY: (Math.random() - 0.5) * 0.5,
+                color: `rgba(${Math.random() * 100 + 155}, ${Math.random() * 100 + 155}, 255, ${Math.random() * 0.5 + 0.2})`
             });
         }
         
-        // Animar partículas con control de FPS
-        let lastTime = 0;
-        const fps = 30; // Reducir FPS en móvil
-        const interval = 1000 / fps;
-        
-        function animateParticles(timestamp) {
-            if (timestamp - lastTime > interval) {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                particles.forEach(particle => {
-                    // Actualizar posición
-                    particle.x += particle.speedX;
-                    particle.y += particle.speedY;
-                    
-                    // Rebotar en los bordes
-                    if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
-                    if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
-                    
-                    // Dibujar partícula
-                    ctx.beginPath();
-                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-                    ctx.fillStyle = particle.color;
-                    ctx.fill();
-                });
-                
-                lastTime = timestamp;
-            }
+        // Animar partículas
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            animationFrame = requestAnimationFrame(animateParticles);
+            particles.forEach(particle => {
+                // Actualizar posición
+                particle.x += particle.speedX;
+                particle.y += particle.speedY;
+                
+                // Rebotar en los bordes
+                if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
+                if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
+                
+                // Dibujar partícula
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                ctx.fillStyle = particle.color;
+                ctx.fill();
+                
+                // Conectar partículas cercanas
+                particles.forEach(otherParticle => {
+                    const dx = particle.x - otherParticle.x;
+                    const dy = particle.y - otherParticle.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(100, 150, 255, ${0.1 * (1 - distance/100)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particle.x, particle.y);
+                        ctx.lineTo(otherParticle.x, otherParticle.y);
+                        ctx.stroke();
+                    }
+                });
+            });
+            
+            requestAnimationFrame(animateParticles);
         }
         
         animateParticles();
-        
-        // Limpiar al salir de la página
-        window.addEventListener('beforeunload', function() {
-            cancelAnimationFrame(animationFrame);
-        });
     }
     
-    // Sistema del carrusel 3D - OPTIMIZADO
+    // Sistema del carrusel 3D
     function initCarousel() {
         const carousel = document.querySelector('.carousel-3d');
-        if (!carousel) return;
-        
         const items = document.querySelectorAll('.carousel-item');
         const prevBtn = document.querySelector('.prev-btn');
         const nextBtn = document.querySelector('.next-btn');
@@ -309,97 +284,80 @@ document.addEventListener('DOMContentLoaded', function() {
         let currentIndex = 0;
         const totalItems = items.length;
         const angle = 360 / totalItems;
-        let autoPlay;
         
         function updateCarousel() {
-            // Usar transform3d para mejor rendimiento
+            // Rotar el carrusel
             carousel.style.transform = `rotateY(${currentIndex * -angle}deg)`;
             
             // Actualizar clases activas
             items.forEach((item, index) => {
-                item.classList.toggle('active', index === currentIndex);
+                item.classList.remove('active');
+                if (index === currentIndex) {
+                    item.classList.add('active');
+                }
             });
             
             // Actualizar indicadores
             indicators.forEach((indicator, index) => {
-                indicator.classList.toggle('active', index === currentIndex);
+                indicator.classList.remove('active');
+                if (index === currentIndex) {
+                    indicator.classList.add('active');
+                }
             });
         }
         
-        // Navegación automática con control
-        function startAutoPlay() {
+        // Navegación automática
+        let autoPlay = setInterval(() => {
+            currentIndex = (currentIndex + 1) % totalItems;
+            updateCarousel();
+        }, 4000);
+        
+        // Botones de navegación
+        prevBtn.addEventListener('click', () => {
+            clearInterval(autoPlay);
+            currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+            updateCarousel();
             autoPlay = setInterval(() => {
                 currentIndex = (currentIndex + 1) % totalItems;
                 updateCarousel();
             }, 4000);
-        }
+        });
         
-        function stopAutoPlay() {
+        nextBtn.addEventListener('click', () => {
             clearInterval(autoPlay);
-        }
-        
-        function navigate(direction) {
-            stopAutoPlay();
-            currentIndex = (currentIndex + direction + totalItems) % totalItems;
+            currentIndex = (currentIndex + 1) % totalItems;
             updateCarousel();
-            startAutoPlay();
-        }
-        
-        // Botones de navegación
-        if (prevBtn) prevBtn.addEventListener('click', () => navigate(-1));
-        if (nextBtn) nextBtn.addEventListener('click', () => navigate(1));
+            autoPlay = setInterval(() => {
+                currentIndex = (currentIndex + 1) % totalItems;
+                updateCarousel();
+            }, 4000);
+        });
         
         // Indicadores
         indicators.forEach((indicator, index) => {
             indicator.addEventListener('click', () => {
-                stopAutoPlay();
+                clearInterval(autoPlay);
                 currentIndex = index;
                 updateCarousel();
-                startAutoPlay();
+                autoPlay = setInterval(() => {
+                    currentIndex = (currentIndex + 1) % totalItems;
+                    updateCarousel();
+                }, 4000);
             });
         });
         
-        // Control de autoplay
-        carousel.addEventListener('mouseenter', stopAutoPlay);
-        carousel.addEventListener('mouseleave', startAutoPlay);
-        carousel.addEventListener('touchstart', stopAutoPlay);
+        // Pausar autoplay al hacer hover
+        carousel.addEventListener('mouseenter', () => {
+            clearInterval(autoPlay);
+        });
         
-        // Iniciar autoplay
-        startAutoPlay();
-        
-        // Pausar autoplay cuando la página no está visible
-        document.addEventListener('visibilitychange', function() {
-            if (document.hidden) {
-                stopAutoPlay();
-            } else {
-                startAutoPlay();
-            }
+        carousel.addEventListener('mouseleave', () => {
+            autoPlay = setInterval(() => {
+                currentIndex = (currentIndex + 1) % totalItems;
+                updateCarousel();
+            }, 4000);
         });
     }
-    
-    // Setup para fix de viewport en móviles
-    function setupViewportFix() {
-        // Prevenir zoom en inputs
-        document.addEventListener('touchstart', function(e) {
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
-                return;
-            }
-        }, { passive: true });
-        
-        // Fix para altura visual en móviles
-        function setVH() {
-            let vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
-        }
-        
-        setVH();
-        window.addEventListener('resize', setVH);
-        window.addEventListener('orientationchange', setVH);
-    }
-    
-    // Inicializar video
-    initVideo();
-    initDesktopRecommendation();
     
     // Contador de visitas
     let visitCount = localStorage.getItem('btfVisitCount') || 0;
@@ -407,34 +365,104 @@ document.addEventListener('DOMContentLoaded', function() {
     localStorage.setItem('btfVisitCount', visitCount);
     
     console.log(`¡Bienvenido a Beyond the Future! Esta es tu visita número ${visitCount}.`);
+    
+    // Añadir estilos CSS para animaciones
+    const style = document.createElement('style');
+    style.textContent = `
+        .fade-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .downloading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .main-nav {
+                display: none;
+            }
+            
+            .main-nav.active {
+                display: block;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 14, 41, 0.95);
+                backdrop-filter: blur(15px);
+                padding: 20px;
+            }
+            
+            .main-nav.active ul {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .mobile-menu-btn.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+            
+            .mobile-menu-btn.active span:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .mobile-menu-btn.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -6px);
+            }
+        }
+    `;
+    document.head.appendChild(style);
 });
 
-// Control de video
+// Control de video - Agrega esto al DOMContentLoaded
 function initVideo() {
     const videoWrapper = document.querySelector('.video-wrapper');
     const iframe = videoWrapper?.querySelector('iframe');
     
     if (iframe) {
+        // Mostrar indicador de carga
         iframe.addEventListener('load', function() {
             videoWrapper.classList.remove('loading');
         });
         
-        // Fallback timeout
+        // Ocultar indicador después de un tiempo (fallback)
         setTimeout(() => {
             videoWrapper.classList.remove('loading');
         }, 3000);
         
+        // Agregar clase loading inicial
         videoWrapper.classList.add('loading');
     }
 }
+
+// Llamar la función cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    initVideo();
+    
+    // También agregar el enlace al nav si quieres
+    const nav = document.querySelector('.main-nav ul');
+    if (nav) {
+        const trailerItem = document.createElement('li');
+        trailerItem.innerHTML = '<a href="#trailer" class="nav-link">Tráiler</a>';
+        // Insertar antes de Demo
+        const demoItem = document.querySelector('a[href="#demo"]').parentElement;
+        nav.insertBefore(trailerItem, demoItem);
+    }
+});
 
 // Detección de dispositivo y pantalla de recomendación
 function initDesktopRecommendation() {
     const recommendation = document.getElementById('desktop-recommendation');
     const continueMobileBtn = document.getElementById('continue-mobile');
     const openDesktopBtn = document.getElementById('open-desktop');
-    
-    if (!recommendation) return;
     
     // Verificar si es un dispositivo móvil
     function isMobileDevice() {
@@ -448,11 +476,526 @@ function initDesktopRecommendation() {
     }
     
     // Mostrar recomendación solo en móviles y si no se ha aceptado antes
-    if (isMobileDevice() && !hasAcceptedRecommendation()) {
+    if (isMobileDevice() && !hasAcceptedRecommendation() && recommendation) {
         recommendation.style.display = 'flex';
-        document.body.style.overflow = 'hidden'; // Prevenir scroll
         
         // Continuar en móvil
+        continueMobileBtn.addEventListener('click', function() {
+            localStorage.setItem('desktopRecommendationAccepted', 'true');
+            recommendation.classList.add('hidden');
+            setTimeout(() => {
+                recommendation.style.display = 'none';
+            }, 500);
+        });
+        
+        // Abrir en desktop (intentar abrir en nueva ventana/pestaña)
+        openDesktopBtn.addEventListener('click', function() {
+            // Intentar abrir la página en una nueva ventana (simulando desktop)
+            const newWindow = window.open(window.location.href, '_blank');
+            if (newWindow) {
+                // Si se pudo abrir nueva ventana, cerrar esta
+                setTimeout(() => {
+                    window.close();
+                }, 1000);
+            } else {
+                // Si el navegador bloquea popup, simplemente continuar
+                alert('Por favor, copia la URL y ábrela en tu navegador de escritorio para la mejor experiencia.');
+                localStorage.setItem('desktopRecommendationAccepted', 'true');
+                recommendation.classList.add('hidden');
+                setTimeout(() => {
+                    recommendation.style.display = 'none';
+                }, 500);
+            }
+        });
+        
+        // Cerrar con ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && recommendation.style.display === 'flex') {
+                localStorage.setItem('desktopRecommendationAccepted', 'true');
+                recommendation.classList.add('hidden');
+                setTimeout(() => {
+                    recommendation.style.display = 'none';
+                }, 500);
+            }
+        });
+    } else {
+        // Ocultar si no es móvil o ya se aceptó
+        if (recommendation) {
+            recommendation.style.display = 'none';
+        }
+    }
+}
+
+// Llamar la función cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    initDesktopRecommendation();
+});
+
+// Script para funcionalidades móviles - SOLO SE ACTIVA EN MÓVILES
+document.addEventListener('DOMContentLoaded', function() {
+    // Solo inicializar funcionalidades móviles si estamos en un dispositivo móvil
+    if (window.innerWidth <= 768) {
+        initMobileFeatures();
+    }
+    
+    // Inicializar navegación suave (funciona en todos los dispositivos)
+    initSmoothNavigation();
+    
+    // Inicializar otras funcionalidades que deben funcionar en todos lados
+    initParticles();
+    initCarousel();
+    initDownloadButton();
+    initScrollAnimations();
+    initVideo();
+    initDesktopRecommendation();
+});
+
+// Funcionalidades específicas para móviles
+function initMobileFeatures() {
+    console.log('Inicializando funcionalidades móviles');
+    
+    // Inicializar navegación móvil
+    initMobileNavigation();
+    
+    // Prevenir problemas de scroll en móviles
+    preventMobileScrollIssues();
+    
+    // Optimizar carrusel para móviles
+    optimizeCarouselForMobile();
+}
+
+// Navegación móvil - SOLO PARA MÓVILES
+function initMobileNavigation() {
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const mainNav = document.querySelector('.main-nav');
+    
+    if (!mobileMenuBtn || !mainNav) return;
+    
+    // Crear overlay para el menú móvil
+    const navOverlay = document.createElement('div');
+    navOverlay.className = 'nav-overlay';
+    document.body.appendChild(navOverlay);
+    
+    // Función para abrir menú móvil
+    function openMobileMenu() {
+        mainNav.classList.add('active');
+        navOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        mobileMenuBtn.classList.add('active');
+    }
+    
+    // Función para cerrar menú móvil
+    function closeMobileMenu() {
+        mainNav.classList.remove('active');
+        navOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+        mobileMenuBtn.classList.remove('active');
+    }
+    
+    // Event listeners
+    mobileMenuBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (mainNav.classList.contains('active')) {
+            closeMobileMenu();
+        } else {
+            openMobileMenu();
+        }
+    });
+    
+    navOverlay.addEventListener('click', closeMobileMenu);
+    
+    // Cerrar menú al hacer clic en un enlace
+    const navLinks = mainNav.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', closeMobileMenu);
+    });
+    
+    // Cerrar menú con tecla ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && mainNav.classList.contains('active')) {
+            closeMobileMenu();
+        }
+    });
+}
+
+// Prevenir problemas de scroll en móviles
+function preventMobileScrollIssues() {
+    // Agregar estilos para prevenir scroll horizontal
+    const antiScrollStyles = document.createElement('style');
+    antiScrollStyles.textContent = `
+        @media (max-width: 768px) {
+            html, body {
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+            
+            /* Mejorar rendimiento en móviles */
+            .carousel-3d, .hero-background {
+                transform: translateZ(0);
+                -webkit-transform: translateZ(0);
+            }
+        }
+    `;
+    document.head.appendChild(antiScrollStyles);
+}
+
+// Optimizar carrusel para móviles
+function optimizeCarouselForMobile() {
+    const carousel = document.querySelector('.carousel-3d');
+    if (!carousel) return;
+    
+    // Desactivar autoplay en móviles para mejor rendimiento
+    const carouselContainer = document.querySelector('.carousel-3d-container');
+    if (carouselContainer) {
+        carouselContainer.addEventListener('touchstart', function() {
+            // Pausar cualquier autoplay en móviles durante interacción táctil
+            const event = new Event('mouseenter');
+            carousel.dispatchEvent(event);
+        });
+    }
+}
+
+// Navegación suave (funciona en todos los dispositivos)
+function initSmoothNavigation() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            const targetSection = document.querySelector(targetId);
+            
+            if (targetSection) {
+                const offsetTop = targetSection.offsetTop - 80;
+                
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+                
+                // Cerrar menú móvil si está abierto (solo en móviles)
+                if (window.innerWidth <= 768) {
+                    closeMobileMenu();
+                }
+            }
+        });
+    });
+    
+    // Función auxiliar para cerrar menú móvil
+    function closeMobileMenu() {
+        const mainNav = document.querySelector('.main-nav');
+        const navOverlay = document.querySelector('.nav-overlay');
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        
+        if (mainNav) mainNav.classList.remove('active');
+        if (navOverlay) navOverlay.classList.remove('active');
+        if (mobileMenuBtn) mobileMenuBtn.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+// Sistema de partículas (igual que antes)
+function initParticles() {
+    const canvas = document.getElementById('particles-canvas');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    
+    const particles = [];
+    const particleCount = window.innerWidth < 768 ? 30 : 50;
+    
+    for (let i = 0; i < particleCount; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2 + 1,
+            speedX: (Math.random() - 0.5) * 0.5,
+            speedY: (Math.random() - 0.5) * 0.5,
+            color: `rgba(${Math.random() * 100 + 155}, ${Math.random() * 100 + 155}, 255, ${Math.random() * 0.5 + 0.2})`
+        });
+    }
+    
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        particles.forEach(particle => {
+            particle.x += particle.speedX;
+            particle.y += particle.speedY;
+            
+            if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
+            if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
+            
+            ctx.beginPath();
+            ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            ctx.fillStyle = particle.color;
+            ctx.fill();
+            
+            if (window.innerWidth > 768) {
+                particles.forEach(otherParticle => {
+                    const dx = particle.x - otherParticle.x;
+                    const dy = particle.y - otherParticle.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(100, 150, 255, ${0.1 * (1 - distance/100)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particle.x, particle.y);
+                        ctx.lineTo(otherParticle.x, otherParticle.y);
+                        ctx.stroke();
+                    }
+                });
+            }
+        });
+        
+        requestAnimationFrame(animateParticles);
+    }
+    
+    animateParticles();
+}
+
+// Sistema del carrusel (mejorado para ambos)
+function initCarousel() {
+    const carousel = document.querySelector('.carousel-3d');
+    const items = document.querySelectorAll('.carousel-item');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    const indicators = document.querySelectorAll('.indicator');
+    
+    if (!carousel || items.length === 0) return;
+    
+    let currentIndex = 0;
+    const totalItems = items.length;
+    const angle = 360 / totalItems;
+    
+    // Ajustar parámetros según el tamaño de pantalla
+    function getCarouselParams() {
+        if (window.innerWidth < 481) {
+            return { perspective: 800, translateZ: 200 };
+        } else if (window.innerWidth < 769) {
+            return { perspective: 800, translateZ: 250 };
+        } else if (window.innerWidth < 1025) {
+            return { perspective: 1000, translateZ: 400 };
+        } else {
+            return { perspective: 1200, translateZ: 500 };
+        }
+    }
+    
+    function updateCarousel() {
+        const params = getCarouselParams();
+        const carouselContainer = document.querySelector('.carousel-3d-container');
+        
+        if (carouselContainer) {
+            carouselContainer.style.perspective = `${params.perspective}px`;
+        }
+        
+        carousel.style.transform = `rotateY(${currentIndex * -angle}deg)`;
+        
+        items.forEach((item, index) => {
+            item.classList.remove('active');
+            if (index === currentIndex) {
+                item.classList.add('active');
+            }
+        });
+        
+        indicators.forEach((indicator, index) => {
+            indicator.classList.remove('active');
+            if (index === currentIndex) {
+                indicator.classList.add('active');
+            }
+        });
+    }
+    
+    // Navegación automática (solo en desktop)
+    let autoPlay;
+    if (window.innerWidth > 768) {
+        autoPlay = setInterval(() => {
+            currentIndex = (currentIndex + 1) % totalItems;
+            updateCarousel();
+        }, 4000);
+    }
+    
+    function restartAutoPlay() {
+        if (autoPlay) clearInterval(autoPlay);
+        if (window.innerWidth > 768) {
+            autoPlay = setInterval(() => {
+                currentIndex = (currentIndex + 1) % totalItems;
+                updateCarousel();
+            }, 4000);
+        }
+    }
+    
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+            updateCarousel();
+            restartAutoPlay();
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % totalItems;
+            updateCarousel();
+            restartAutoPlay();
+        });
+    }
+    
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            currentIndex = index;
+            updateCarousel();
+            restartAutoPlay();
+        });
+    });
+    
+    if (window.innerWidth > 768) {
+        carousel.addEventListener('mouseenter', () => {
+            if (autoPlay) clearInterval(autoPlay);
+        });
+        
+        carousel.addEventListener('mouseleave', () => {
+            restartAutoPlay();
+        });
+    }
+    
+    window.addEventListener('resize', updateCarousel);
+    updateCarousel();
+}
+
+// Las demás funciones permanecen igual que antes...
+function initDownloadButton() {
+    const downloadBtn = document.getElementById('download-btn');
+    if (!downloadBtn) return;
+
+    downloadBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const originalText = this.innerHTML;
+        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando descarga...';
+        this.classList.add('downloading');
+        
+        const fileId = '1fpok1yFQaivqwK7f6BmomKuynz3FMqdt';
+        const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+        
+        const downloadLink = document.createElement('a');
+        downloadLink.href = downloadUrl;
+        downloadLink.download = 'BeyondTheFuture_Demo.zip';
+        downloadLink.style.display = 'none';
+        
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        
+        setTimeout(() => {
+            this.innerHTML = originalText;
+            this.classList.remove('downloading');
+            showDownloadMessage();
+        }, 2000);
+    });
+}
+
+function showDownloadMessage() {
+    const downloadMessage = document.createElement('div');
+    downloadMessage.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--electric-blue);
+        color: white;
+        padding: 12px 16px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+        max-width: 300px;
+        font-size: 0.9rem;
+    `;
+    downloadMessage.innerHTML = `
+        <i class="fas fa-check-circle"></i>
+        ¡Descarga iniciada! Revisa tu carpeta de descargas.
+    `;
+    
+    document.body.appendChild(downloadMessage);
+    
+    setTimeout(() => {
+        downloadMessage.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+            if (document.body.contains(downloadMessage)) {
+                document.body.removeChild(downloadMessage);
+            }
+        }, 300);
+    }, 5000);
+}
+
+function initScrollAnimations() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in');
+            }
+        });
+    }, observerOptions);
+    
+    const elementsToAnimate = document.querySelectorAll('.feature-card, .character-card, .team-member, .demo-card, .gameplay-features, .video-container, .lore-section');
+    
+    elementsToAnimate.forEach(element => {
+        element.classList.add('fade-element');
+        observer.observe(element);
+    });
+}
+
+function initVideo() {
+    const videoWrapper = document.querySelector('.video-wrapper');
+    const iframe = videoWrapper?.querySelector('iframe');
+    
+    if (iframe) {
+        iframe.addEventListener('load', function() {
+            videoWrapper.classList.remove('loading');
+        });
+        
+        setTimeout(() => {
+            videoWrapper.classList.remove('loading');
+        }, 3000);
+        
+        videoWrapper.classList.add('loading');
+    }
+}
+
+function initDesktopRecommendation() {
+    const recommendation = document.getElementById('desktop-recommendation');
+    const continueMobileBtn = document.getElementById('continue-mobile');
+    const openDesktopBtn = document.getElementById('open-desktop');
+    
+    if (!recommendation) return;
+    
+    function isMobileDevice() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+               window.innerWidth <= 1024;
+    }
+    
+    function hasAcceptedRecommendation() {
+        return localStorage.getItem('desktopRecommendationAccepted') === 'true';
+    }
+    
+    if (isMobileDevice() && !hasAcceptedRecommendation()) {
+        recommendation.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
         continueMobileBtn.addEventListener('click', function() {
             localStorage.setItem('desktopRecommendationAccepted', 'true');
             recommendation.classList.add('hidden');
@@ -462,8 +1005,8 @@ function initDesktopRecommendation() {
             }, 500);
         });
         
-        // Abrir en desktop
         openDesktopBtn.addEventListener('click', function() {
+            localStorage.setItem('desktopRecommendationAccepted', 'true');
             const newWindow = window.open(window.location.href, '_blank');
             if (newWindow) {
                 setTimeout(() => {
@@ -471,7 +1014,6 @@ function initDesktopRecommendation() {
                 }, 1000);
             } else {
                 alert('Por favor, copia la URL y ábrela en tu navegador de escritorio para la mejor experiencia.');
-                localStorage.setItem('desktopRecommendationAccepted', 'true');
                 recommendation.classList.add('hidden');
                 document.body.style.overflow = '';
                 setTimeout(() => {
@@ -480,7 +1022,6 @@ function initDesktopRecommendation() {
             }
         });
         
-        // Cerrar con ESC
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && recommendation.style.display === 'flex') {
                 localStorage.setItem('desktopRecommendationAccepted', 'true');
@@ -496,98 +1037,48 @@ function initDesktopRecommendation() {
     }
 }
 
-// Agregar estilos CSS para las animaciones
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
+// Agregar estilos CSS para animaciones si no existen
+if (!document.querySelector('#mobile-fixes')) {
+    const style = document.createElement('style');
+    style.id = 'mobile-fixes';
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
-        to {
-            transform: translateX(0);
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+        
+        .downloading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        
+        .fade-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .fade-in {
             opacity: 1;
+            transform: translateY(0);
         }
-    }
-    
-    @keyframes slideOut {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-    
-    .downloading {
-        pointer-events: none;
-        opacity: 0.7;
-    }
-    
-    .fade-element {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-    
-    .fade-in {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    
-    /* Fix para viewport en móviles */
-    :root {
-        --vh: 1vh;
-    }
-    
-    .hero {
-        height: 100vh;
-        height: calc(var(--vh, 1vh) * 100);
-    }
-    
-    @media (max-width: 768px) {
-        .main-nav {
-            display: none;
-        }
-        
-        .main-nav.active {
-            display: block;
-            position: fixed;
-            top: 60px;
-            left: 0;
-            width: 100%;
-            height: calc(100vh - 60px);
-            background: rgba(10, 14, 41, 0.98);
-            backdrop-filter: blur(20px);
-            padding: 30px 20px;
-            z-index: 999;
-            overflow-y: auto;
-        }
-        
-        .main-nav.active ul {
-            flex-direction: column;
-            gap: 20px;
-            text-align: center;
-        }
-        
-        .mobile-menu-btn.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-        
-        .mobile-menu-btn.active span:nth-child(2) {
-            opacity: 0;
-        }
-        
-        .mobile-menu-btn.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
-        
-        /* Prevenir zoom en inputs en iOS */
-        input, select, textarea {
-            font-size: 16px !important;
-        }
-    }
-`;
-document.head.appendChild(style);
+    `;
+    document.head.appendChild(style);
+}
