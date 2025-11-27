@@ -889,7 +889,6 @@ p {
 /* Controles del carrusel - Mantienen posición */
 .carousel-controls {
     position: absolute;
-    top: 50%;
     left: 0;
     right: 0;
     display: flex;
@@ -1662,5 +1661,360 @@ p {
     
     .recommendation-icon {
         font-size: 2.5rem;
+    }
+}
+
+/* ========== SOLO CAMBIOS PARA MÓVILES ========== */
+@media (max-width: 768px) {
+    /* Prevenir scroll horizontal en móviles */
+    html, body {
+        max-width: 100%;
+        overflow-x: hidden;
+        position: relative;
+    }
+    
+    /* Header mejorado para móviles */
+    .main-header {
+        padding: 8px 0;
+    }
+    
+    .header-container {
+        padding: 0 15px;
+    }
+    
+    .logo-image {
+        height: 50px;
+    }
+    
+    /* Navegación móvil - COMPLETAMENTE NUEVA */
+    .mobile-menu-btn {
+        display: flex;
+    }
+    
+    .main-nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: rgba(10, 14, 41, 0.98);
+        backdrop-filter: blur(20px);
+        padding: 80px 30px 30px;
+        transition: right 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+        z-index: 999;
+        border-left: 1px solid rgba(41, 98, 255, 0.3);
+        box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    .main-nav.active {
+        right: 0;
+    }
+    
+    .main-nav ul {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .main-nav li {
+        width: 100%;
+        border-bottom: 1px solid rgba(41, 98, 255, 0.1);
+    }
+    
+    .main-nav li:last-child {
+        border-bottom: none;
+    }
+    
+    .nav-link {
+        display: block;
+        padding: 15px 0;
+        width: 100%;
+        text-align: left;
+        font-size: 1.1rem;
+    }
+    
+    .nav-link::after {
+        display: none;
+    }
+    
+    .mobile-menu-btn.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    
+    .mobile-menu-btn.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .mobile-menu-btn.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
+    }
+    
+    /* Overlay para el menú móvil */
+    .nav-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 998;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    /* Hero section ajustada para móviles */
+    .hero {
+        padding-top: 70px;
+    }
+    
+    .hero-container {
+        padding: 0 15px;
+    }
+    
+    .hero-title {
+        width: 280px;
+        max-width: 100%;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+        padding: 0 10px;
+    }
+    
+    .hero-buttons {
+        gap: 12px;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn {
+        min-width: 200px;
+        max-width: 250px;
+        padding: 12px 25px;
+    }
+    
+    /* Carrusel 3D - ADAPTADO PARA MÓVIL */
+    .carousel-section {
+        height: 400px;
+        padding: 40px 0;
+    }
+    
+    .carousel-3d-container {
+        height: 250px;
+        perspective: 800px;
+    }
+    
+    .carousel-item {
+        width: 280px;
+        height: 160px;
+        transform: translate(-50%, -50%) rotateY(0deg) translateZ(250px);
+    }
+    
+    .carousel-item.active {
+        transform: translate(-50%, -50%) rotateY(0deg) translateZ(250px) scale(1.05);
+    }
+    
+    .carousel-item:nth-child(1) { transform: translate(-50%, -50%) rotateY(0deg) translateZ(250px); }
+    .carousel-item:nth-child(2) { transform: translate(-50%, -50%) rotateY(72deg) translateZ(250px); }
+    .carousel-item:nth-child(3) { transform: translate(-50%, -50%) rotateY(144deg) translateZ(250px); }
+    .carousel-item:nth-child(4) { transform: translate(-50%, -50%) rotateY(216deg) translateZ(250px); }
+    .carousel-item:nth-child(5) { transform: translate(-50%, -50%) rotateY(288deg) translateZ(250px); }
+    
+    .carousel-controls {
+        padding: 0 20px;
+    }
+    
+    .carousel-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .carousel-indicators {
+        margin-top: 20px;
+        gap: 10px;
+    }
+    
+    .indicator {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .carousel-caption {
+        padding: 12px 10px 10px;
+    }
+    
+    .carousel-caption h3 {
+        font-size: 0.95rem;
+    }
+    
+    .carousel-caption p {
+        font-size: 0.8rem;
+    }
+    
+    /* Gameplay - Una columna en móvil */
+    .gameplay-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .feature-card, .info-card {
+        padding: 20px;
+    }
+    
+    /* Video section - Una columna en móvil */
+    .video-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .video-wrapper iframe {
+        height: 250px;
+    }
+    
+    /* Personajes - Una columna en móvil */
+    .characters-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    .character-image {
+        height: 200px;
+    }
+    
+    .character-stats {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    /* Demo card ajustes */
+    .demo-card {
+        padding: 25px 20px;
+    }
+    
+    .demo-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    /* Team grid - Una columna en móvil */
+    .team-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    /* Footer ajustes móvil */
+    .footer-logo .logo-image {
+        height: 120px;
+    }
+    
+    .footer-nav ul {
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 10px;
+    }
+    
+    .hero-title {
+        width: 220px;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .btn {
+        min-width: 180px;
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .carousel-section {
+        height: 350px;
+        padding: 30px 0;
+    }
+    
+    .carousel-3d-container {
+        height: 200px;
+    }
+    
+    .carousel-item {
+        width: 220px;
+        height: 130px;
+        transform: translate(-50%, -50%) rotateY(0deg) translateZ(200px);
+    }
+    
+    .carousel-item.active {
+        transform: translate(-50%, -50%) rotateY(0deg) translateZ(200px) scale(1.05);
+    }
+    
+    .carousel-item:nth-child(1) { transform: translate(-50%, -50%) rotateY(0deg) translateZ(200px); }
+    .carousel-item:nth-child(2) { transform: translate(-50%, -50%) rotateY(72deg) translateZ(200px); }
+    .carousel-item:nth-child(3) { transform: translate(-50%, -50%) rotateY(144deg) translateZ(200px); }
+    .carousel-item:nth-child(4) { transform: translate(-50%, -50%) rotateY(216deg) translateZ(200px); }
+    .carousel-item:nth-child(5) { transform: translate(-50%, -50%) rotateY(288deg) translateZ(200px); }
+    
+    .carousel-controls {
+        padding: 0 15px;
+    }
+    
+    .carousel-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+    }
+    
+    .feature-card, .info-card, .character-info, .team-member, .demo-card {
+        padding: 15px;
+    }
+}
+
+/* Tablets pequeñas */
+@media (min-width: 769px) and (max-width: 1024px) {
+    /* Mantener estilo PC pero con ajustes menores si es necesario */
+    .carousel-section {
+        height: 500px;
+    }
+    
+    .carousel-3d-container {
+        height: 350px;
+    }
+    
+    .carousel-item {
+        width: 350px;
+        height: 200px;
+        transform: translate(-50%, -50%) rotateY(0deg) translateZ(400px);
+    }
+    
+    .carousel-item.active {
+        transform: translate(-50%, -50%) rotateY(0deg) translateZ(400px) scale(1.05);
+    }
+    
+    .carousel-item:nth-child(1) { transform: translate(-50%, -50%) rotateY(0deg) translateZ(400px); }
+    .carousel-item:nth-child(2) { transform: translate(-50%, -50%) rotateY(72deg) translateZ(400px); }
+    .carousel-item:nth-child(3) { transform: translate(-50%, -50%) rotateY(144deg) translateZ(400px); }
+    .carousel-item:nth-child(4) { transform: translate(-50%, -50%) rotateY(216deg) translateZ(400px); }
+    .carousel-item:nth-child(5) { transform: translate(-50%, -50%) rotateY(288deg) translateZ(400px); }
+}
+
+@media (max-width: 1920px) {
+    section .member-info {
+        padding-bottom: 0px;
     }
 }
